@@ -65,4 +65,4 @@ def top_contributor(owner, repo):
 
 
 if __name__ == "__main__":
-    app.run(debug="true", host='0.0.0.0', threaded="true")
+    app.run(debug="false", host='0.0.0.0', threaded="true")
