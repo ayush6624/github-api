@@ -3,6 +3,7 @@ import requests
 
 
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 @app.errorhandler(404)
