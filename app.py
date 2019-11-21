@@ -11,6 +11,35 @@ def not_found(error):
     return jsonify({'error': 'Invalid Request'}), 404
 
 
+@app.route('/popular')
+def popular():
+    '''
+    Shows the Top 3 Starred Repository of the given Languages
+    I've Taken Javascript ,Ruby and Kotlin as an example here
+    '''
+    top_c = []
+    language = ['kotlin', 'go', 'ruby']
+    for lang in language:
+        response = requests.get(
+            'https://api.github.com/search/repositories',
+            params={'q': 'language:' + lang, 'sort': 'stars', 'order': 'desc'},
+
+        )
+        repository = response.json()
+        repository_list = repository['items']
+        repository_list = repository_list[:3]
+
+        for repo in repository_list:
+            ok = {}
+            ok['full_name'] = repo['full_name']
+            ok['language'] = lang
+            ok['stars'] = repo['stargazers_count']
+            ok['url'] = 'https://github.com/'+repo['full_name']
+            ok['desciption'] = repo['description']
+            top_c.append(ok)
+    return jsonify(top_c)
+
+
 @app.route('/contributor/<string:owner>/<string:repo>')
 def top_contributor(owner, repo):
     '''
@@ -19,20 +48,19 @@ def top_contributor(owner, repo):
     :param owner name
     :param repository name
     '''
+    top_c = []
     req_top_contributor = requests.get(
         'https://api.github.com/repos/' + owner + '/' + repo + '/contributors')
 
-    top_c = req_top_contributor.json()
-    top_c = top_c[:5]
+    repositories = req_top_contributor.json()
+    repositories = repositories[:5]
 
-    for user in top_c:
-        name = user['login']
-        number_of_contrib = user['contributions']
-        url = 'https://github.com/'+name
-        user.clear()
-        user['login'] = name
-        user['contributions'] = number_of_contrib
-        user['url'] = url
+    for repo in repositories:
+        ok = {}
+        ok['login'] = repo['login']
+        ok['contributions'] = repo['contributions']
+        ok['url'] = 'https://github.com/'+repo['login']
+        top_c.append(ok)
     return jsonify(top_c)
 
 
