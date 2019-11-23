@@ -22,10 +22,10 @@ def popular():
     tags:
       - Popular Repositories
     responses:
-      200: 
+      200:
         description: Request Successfully Executed
       400:
-        description: Backend Error 
+        description: Backend Error
       404:
         description: Not Found
     '''
@@ -69,10 +69,10 @@ def top_contributor(owner, repo):
         type: string
         required: true
     responses:
-      200: 
+      200:
         description: Request Successfully Executed
       400:
-        description: Backend Error 
+        description: Backend Error
       404:
         description: Not Found
     '''
