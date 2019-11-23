@@ -1,9 +1,11 @@
 from flask import Flask, jsonify
 import requests
+from flasgger import Swagger
 
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+Swagger(app)
 
 
 @app.errorhandler(404)
@@ -15,7 +17,17 @@ def not_found(error):
 def popular():
     '''
     Shows the Top 3 Starred Repository of the given Languages
-    I've Taken Javascript ,Ruby and Kotlin as an example here
+    I've Taken Kotlin, Go & Ruby as languages here
+    ---
+    tags:
+      - Popular Repositories
+    responses:
+      200: 
+        description: Request Successfully Executed
+      400:
+        description: Backend Error 
+      404:
+        description: Not Found
     '''
     top_c = []
     language = ['kotlin', 'go', 'ruby']
@@ -44,9 +56,25 @@ def popular():
 def top_contributor(owner, repo):
     '''
     Lists the top 5 contributors of a repository
-
-    :param owner name
-    :param repository name
+    ---
+    tags:
+      - Top Contributors
+    parameters:
+      - name: owner
+        in: path
+        type: string
+        required: true
+      - name: repo
+        in: path
+        type: string
+        required: true
+    responses:
+      200: 
+        description: Request Successfully Executed
+      400:
+        description: Backend Error 
+      404:
+        description: Not Found
     '''
     top_c = []
     req_top_contributor = requests.get(
