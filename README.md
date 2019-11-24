@@ -27,5 +27,5 @@ We want to have an app that utilizes the GitHub API and creates a wrapper librar
 
 ## Bonus
 
-- [ ]A frontend to test the REST-API which shows formatted JSON response in an easy-to-read format
+- [x] A frontend to test the REST-API which shows formatted JSON response in an easy-to-read format
 - [x] You containerize the app using Docker.
