@@ -29,27 +29,26 @@ def popular():
       404:
         description: Not Found
     '''
-    top_c = []
-    language = ['kotlin', 'go', 'ruby']
-    for lang in language:
+    top_repo_list = []
+    languages = ['kotlin', 'go', 'ruby']
+    for language in languages:
         response = requests.get(
             'https://api.github.com/search/repositories',
-            params={'q': 'language:' + lang, 'sort': 'stars', 'order': 'desc'},
-
+            params={'q': 'language:' + language,
+                    'sort': 'stars', 'order': 'desc'},
         )
-        repository = response.json()
-        repository_list = repository['items']
-        repository_list = repository_list[:3]
 
-        for repo in repository_list:
-            ok = {}
-            ok['full_name'] = repo['full_name']
-            ok['language'] = lang
-            ok['stars'] = repo['stargazers_count']
-            ok['url'] = 'https://github.com/'+repo['full_name']
-            ok['desciption'] = repo['description']
-            top_c.append(ok)
-    return jsonify(top_c)
+        repositories = response.json()
+        repositories = repositories['items']
+        repositories = repositories[:3]
+
+        keys = ['full_name', 'language',
+                'stargazers_count', 'html_url', 'description']
+
+        language_list = [dict((k, repo[k]) for k in keys)
+                         for repo in repositories]
+        top_repo_list.extend(language_list)
+    return jsonify(top_repo_list)
 
 
 @app.route('/contributor/<string:owner>/<string:repo>')
@@ -76,20 +75,16 @@ def top_contributor(owner, repo):
       404:
         description: Not Found
     '''
-    top_c = []
     req_top_contributor = requests.get(
         'https://api.github.com/repos/' + owner + '/' + repo + '/contributors')
 
     repositories = req_top_contributor.json()
     repositories = repositories[:5]
 
-    for repo in repositories:
-        ok = {}
-        ok['login'] = repo['login']
-        ok['contributions'] = repo['contributions']
-        ok['url'] = 'https://github.com/'+repo['login']
-        top_c.append(ok)
-    return jsonify(top_c)
+    keys = ['login', 'contributions', 'html_url']
+    top_repo_list = [dict((k, repo[k]) for k in keys) for repo in repositories]
+
+    return jsonify(top_repo_list)
 
 
 if __name__ == "__main__":
