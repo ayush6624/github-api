@@ -86,6 +86,7 @@ def top_contributor(owner, repo):
 
     # To avoid a situation wherein Github API does not deliver a correct \
     # response eg- owner= torvalds, repo= linux, or wrong info is entered
+
     if req_top_contributor.status_code != 200:
         return jsonify({'error': 'Invalid Request'}), 400
 
