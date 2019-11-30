@@ -8,7 +8,7 @@ API can be reached at https://api.goyal.club
 The API can also be built and run as a Docker container:
 ```bash
 docker build -t github-api .
-docker run -it -p 5000:5000 --name github-custom-api github-api
+docker run -d -p 5000:5000 --name github-api github-api
 ```
 
 ## Local Installation Setup
